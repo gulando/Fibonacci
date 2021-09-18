@@ -6,6 +6,6 @@ namespace Fibonacci.Service.Interfaces
 {
     public interface IGetFibonacciNumbers
     {
-        Task<List<int>> GetFibonacciNumbers(FibonacciModel model);
+        List<int> GetFibonacciNumbers(FibonacciModel model);
     }
 }   

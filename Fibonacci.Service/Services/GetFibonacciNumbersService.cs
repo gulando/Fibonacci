@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Runtime.Caching;
+using System.Threading;
 using System.Threading.Tasks;
 using Fibonacci.Service.ExtensionMethods;
 using Fibonacci.Service.Interfaces;
@@ -30,8 +31,13 @@ namespace Fibonacci.Service.Services
             };
         }
 
-        public async Task<List<int>> GetFibonacciNumbers(FibonacciModel model)
+        public List<int> GetFibonacciNumbers(FibonacciModel model)
         {
+            if (model.StartIndex < 0 || model.EndIndex < 0)
+            {
+                throw new FibonacciException(HttpStatusCode.BadRequest, $"{nameof(model)} is invalid");
+            }
+            
             if (model.UseCache)
             {
                 if (_cache.TryGetValue($"{model.StartIndex}-{model.EndIndex}", out List<int> cashedNumbers))
@@ -44,7 +50,7 @@ namespace Fibonacci.Service.Services
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             
-            for (var i = model.StartIndex; i < model.EndIndex; i++)
+            for (var i = model.StartIndex; i <= model.EndIndex; i++)
             {
                 var totalMemory = GC.GetTotalAllocatedBytes().ConvertBytesToMegabytes();
                 if (totalMemory < _applicationSettings.MemoryLimit)
@@ -65,10 +71,11 @@ namespace Fibonacci.Service.Services
                     // Uncomment this in case of we want to return already calculated data.
                     //return numbers;
                 }
-                
+
                 numbers.Add(Fibonacci(i));
             }
 
+            
             if (model.UseCache)
             {
                 _cache.Set($"{model.StartIndex}-{model.EndIndex}", numbers, _cacheItemPolicy.AbsoluteExpiration);

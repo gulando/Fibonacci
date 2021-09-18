@@ -17,6 +17,7 @@ namespace Fibonacci.Api.Controllers
         private readonly IGetFibonacciNumbers _fibonacci;
         private readonly ILogger<FibonacciController> _logger;
         private readonly IMapper _mapper;
+        private const int ThreadsCount = 2; 
 
         public FibonacciController(ILogger<FibonacciController> logger, IGetFibonacciNumbers fibonacci, IMapper mapper)
         {
@@ -30,11 +31,22 @@ namespace Fibonacci.Api.Controllers
         public async Task<string> GetFibonacciData([FromQuery] FibonacciRequestModel model)
         {
             _logger.LogInformation($"{nameof(FibonacciController)} - {nameof(GetFibonacciData)}");
-
-            var requestData = _mapper.Map<FibonacciModel>(model);
-            var data = await _fibonacci.GetFibonacciNumbers(requestData);
+            var data = string.Empty;
             
-            return JsonConvert.SerializeObject(data);
+            // Ths is just imitation, that we can have more than one requests to our GetFibonacciData method.
+            for (var i = 1; i <= ThreadsCount; i++)
+            {
+                data = await Task.Factory.StartNew(() => CalculateFibonacciNumbers(model));
+            }
+
+            return data;
+        }
+
+        private string CalculateFibonacciNumbers(FibonacciRequestModel model)
+        {
+            var requestData = _mapper.Map<FibonacciModel>(model);
+            var data = _fibonacci.GetFibonacciNumbers(requestData);
+            return  JsonConvert.SerializeObject(data);
         }
     }
 }
