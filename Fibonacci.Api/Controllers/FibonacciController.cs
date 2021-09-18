@@ -1,7 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using AutoMapper;
+using Fibonacci.Api.Filters;
+using Fibonacci.Api.RequestModels;
+using Fibonacci.Service.Interfaces;
+using Fibonacci.Service.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -11,17 +13,27 @@ namespace Fibonacci.Api.Controllers
     [Route("api/[controller]")]
     public class FibonacciController : ControllerBase
     {
+        private readonly IGetFibonacciNumbers _fibonacci;
         private readonly ILogger<FibonacciController> _logger;
+        private readonly IMapper _mapper;
 
-        public FibonacciController(ILogger<FibonacciController> logger)
+        public FibonacciController(ILogger<FibonacciController> logger, IGetFibonacciNumbers fibonacci, IMapper mapper)
         {
             _logger = logger;
+            _fibonacci = fibonacci;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public IEnumerable<List<string>> GetFibonacciData()
+        [ServiceFilter(typeof(ValidationFilter))]
+        public List<int> GetFibonacciData([FromQuery] FibonacciRequestModel model)
         {
-            return null;
+            _logger.LogInformation($"{nameof(FibonacciController)} - {nameof(GetFibonacciData)}");
+
+            var requestData = _mapper.Map<FibonacciModel>(model);
+            var data = _fibonacci.GetFibonacciNumbers(requestData);
+            
+            return data;
         }
     }
 }

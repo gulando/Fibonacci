@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Fibonacci.Service
+namespace Fibonacci.Api.RequestModels
 {
-    public class FibonacciModel
+    public class FibonacciRequestModel
     {
         public int StartIndex { get; set; }
         

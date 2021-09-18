@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Fibonacci.Service.Model;
 
 namespace Fibonacci.Service.Interfaces
 {
