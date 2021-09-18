@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using Fibonacci.Api.Filters;
 using Fibonacci.Api.RequestModels;
 using Fibonacci.Service.Interfaces;
 using Fibonacci.Service.Model;
-using Fibonacci.Service.Model.Error;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Fibonacci.Api.Controllers
 {
@@ -29,14 +27,14 @@ namespace Fibonacci.Api.Controllers
 
         [HttpGet]
         [ServiceFilter(typeof(ValidationFilter))]
-        public List<int> GetFibonacciData([FromQuery] FibonacciRequestModel model)
+        public async Task<string> GetFibonacciData([FromQuery] FibonacciRequestModel model)
         {
             _logger.LogInformation($"{nameof(FibonacciController)} - {nameof(GetFibonacciData)}");
 
             var requestData = _mapper.Map<FibonacciModel>(model);
-            var data = _fibonacci.GetFibonacciNumbers(requestData);
+            var data = await _fibonacci.GetFibonacciNumbers(requestData);
             
-            return data;
+            return JsonConvert.SerializeObject(data);
         }
     }
 }

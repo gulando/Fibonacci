@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Fibonacci.Api.RequestModels
+﻿namespace Fibonacci.Api.RequestModels
 {
     public class FibonacciRequestModel
     {
@@ -9,7 +7,5 @@ namespace Fibonacci.Api.RequestModels
         public int EndIndex { get; set; }
 
         public bool UseCache { get; set; } = false;
-        
-        public DateTime DateTime { get; set; }
     }
 }

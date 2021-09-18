@@ -9,7 +9,5 @@ namespace Fibonacci.Service.Model
         public int EndIndex { get; set; }
         
         public bool UseCache { get; set; }
-        
-        public DateTime DateTime { get; set; }
     }
 }
