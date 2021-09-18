@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
 using AutoMapper;
 using Fibonacci.Api.Filters;
 using Fibonacci.Api.RequestModels;
 using Fibonacci.Service.Interfaces;
 using Fibonacci.Service.Model;
+using Fibonacci.Service.Model.Error;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 

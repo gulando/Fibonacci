@@ -7,8 +7,8 @@ namespace Fibonacci.Api.RequestModels
         public int StartIndex { get; set; }
         
         public int EndIndex { get; set; }
-        
-        public bool UseCache { get; set; }
+
+        public bool UseCache { get; set; } = false;
         
         public DateTime DateTime { get; set; }
     }
