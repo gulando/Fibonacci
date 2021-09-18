@@ -1,2 +1,2 @@
 # Fibonacci
-Fibonacci numbers test application
+Fibonacci numbers test application.
